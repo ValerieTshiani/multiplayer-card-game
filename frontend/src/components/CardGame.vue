@@ -50,6 +50,8 @@ export default {
        Winners:{},
        isTieBreak: false,
        playerCount: 6,
+       numberOfDecks:2,
+       numberOfCardsDelt:5,
        validatedPlayerCount: null,
        error: ''
        };
@@ -74,22 +76,28 @@ export default {
     {
       try
       {
-        const response = await axios.get(`http://localhost:3000/deal/${this.playerCount}`);
+        const response = await axios.get("http://localhost:3000/deal",{
+        params: {
+            playerCount: this.playerCount,
+            numberOfDecks: this.numberOfDecks,
+            numberOfCardsDelt: this.numberOfCardsDelt
+          }
+      });
         
         if(!response.data.error){
-          this.Hands = response.data.Hands;
-          this.Winners = response.data.Winners;
-          this.isTieBreak = response.data.IsTieBreak;
+          this.Hands = response.data.data.Hands;
+          this.Winners = response.data.data.Winners;
+          this.isTieBreak = response.data.data.IsTieBreak;
         }
         else{
           this.error = response.data.errorMessage;
         }
         
-        console.log('response.data.', response.data);
+        //console.log('response', response.data);
       }
       catch (error)
       {
-        console.error('Error dealing cards:', error);
+        console.error('Error in the dealing cards:', error);
         this.error = error;
       }
     }
